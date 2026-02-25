@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Driver {
     static public WebDriver getAutoLocalDriver() {
-        WebDriverManager.chromedriver().setup(); // sets up ChromeDriver automatically
+        WebDriverManager.chromedriver().setup();
         return new ChromeDriver();
     }
 
