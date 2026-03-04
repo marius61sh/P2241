@@ -14,7 +14,21 @@ import java.util.HashMap;
 public class Driver {
     static public WebDriver getAutoLocalDriver() {
         WebDriverManager.chromedriver().setup();
-        return new ChromeDriver();
+
+        ChromeOptions options = new ChromeOptions();
+        String os = System.getProperty("os.name", "").toLowerCase();
+        boolean isLinux = os.contains("linux");
+        boolean isCi = System.getenv("CI") != null;
+
+        if (isLinux || isCi) {
+            options.addArguments("--headless=new");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--window-size=1920,1080");
+            options.addArguments("--remote-allow-origins=*");
+        }
+
+        return new ChromeDriver(options);
     }
 
     static public WebDriver getLocalDriver() {
