@@ -21,6 +21,11 @@ public class ScreenRecorderManager {
     private ScreenRecorder screenRecorder;
 
     public void start(String testName) {
+        if (GraphicsEnvironment.isHeadless() || System.getenv("DISPLAY") == null) {
+            System.out.println("[Recorder] Skipped: headless/CI environment");
+            return;
+        }
+
         try {
             GraphicsConfiguration gc = GraphicsEnvironment
                     .getLocalGraphicsEnvironment()
