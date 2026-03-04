@@ -64,8 +64,10 @@ public class FormPom {
     }
 
     public String getTableData(String labelParam) {
-        String value = driver.findElement(By.xpath("//label//*[text()='" + labelParam + "']/../*[2]")).getText();
-        return value;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        By valueCell = By.xpath("//td[normalize-space(text())='" + labelParam + "']/following-sibling::td");
+        WebElement cell = wait.until(d -> d.findElement(valueCell));
+        return cell.getText();
     }
 
     public void setGender(String genderParam) {

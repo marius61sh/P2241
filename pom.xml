@@ -34,5 +34,12 @@
       <artifactId>webdrivermanager</artifactId>
       <version>6.3.2</version>
     </dependency>
+    <!-- Screen recording during tests -->
+    <dependency>
+      <groupId>com.github.stephenc.monte</groupId>
+      <artifactId>monte-screen-recorder</artifactId>
+      <version>0.7.7.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -2,14 +2,15 @@ package org.example.testing;
 
 import org.example.pom.FormPom;
 import org.example.utils.Driver;
+import org.example.utils.ScreenRecorderManager;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class FormTest {
     static public WebDriver driver;
+    private final ScreenRecorderManager recorder = new ScreenRecorderManager();
 
     static public String URL = "https://demoqa.com/";
     static public String FIRST_NAME = "Marius";
@@ -27,6 +28,7 @@ public class FormTest {
 
     @BeforeMethod
     public void beforeMethod() {
+        recorder.start("FormTest");
         driver = Driver.getAutoLocalDriver();
         driver.manage().window().maximize();
     }
@@ -50,12 +52,21 @@ public class FormTest {
         formPom.setCity(CITY);
         formPom.clickSubmit();
 
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         String studentName = formPom.getTableData("Student Name");
         System.out.println("Finish test");
     }
 
     @AfterMethod
     public void afterMethod() {
-
+        if (driver != null) {
+            driver.quit();
+        }
+        recorder.stop();
     }
 }
