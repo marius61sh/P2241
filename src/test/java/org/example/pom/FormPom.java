@@ -149,12 +149,14 @@ public class FormPom {
         takeScreenshot("After Set User Email");
     }
     public void clickPracticeForm() {
-        practiceForm.click();
+        By practiceFormBy = By.xpath("//*[normalize-space(text())='Practice Form']");
+        clickWithRetry(practiceFormBy);
     }
 
 
     public void clickForms() {
-        forms.click();
+        By formsBy = By.xpath("//*[normalize-space(text())='Forms']");
+        clickWithRetry(formsBy);
     }
 
     private static final Logger logger = LoggerFactory.getLogger(Utils.class);
@@ -183,7 +185,22 @@ public class FormPom {
     }
 
     public void scrollToElement(WebElement element) {
-        js.executeScript("arguments[0].scrollIntoView(true);", element);
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+    }
+
+    private void clickWithRetry(By by) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebElement element = wait.until(d -> d.findElement(by));
+        scrollToElement(element);
+
+        try {
+            wait.until(org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable(by)).click();
+        } catch (Exception e) {
+            closeAdvert();
+            element = wait.until(d -> d.findElement(by));
+            scrollToElement(element);
+            js.executeScript("arguments[0].click();", element);
+        }
     }
 
 
