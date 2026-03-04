@@ -4,6 +4,8 @@ import org.example.pom.FormPom;
 import org.example.utils.Driver;
 import org.example.utils.ScreenRecorderManager;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -11,6 +13,7 @@ import org.testng.annotations.Test;
 public class FormTest {
     static public WebDriver driver;
     private final ScreenRecorderManager recorder = new ScreenRecorderManager();
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(FormTest.class);
 
     static public String URL = "https://demoqa.com/";
     static public String FIRST_NAME = "Marius";
@@ -51,6 +54,9 @@ public class FormTest {
         formPom.setState(STATE);
         formPom.setCity(CITY);
         formPom.clickSubmit();
+        String actualName = formPom.getTableData("Student Name");
+        Assert.assertEquals(actualName, FIRST_NAME + " " + LAST_NAME);
+        logger.info("Finish Test");
 
         try {
             Thread.sleep(3000);

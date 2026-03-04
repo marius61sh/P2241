@@ -12,9 +12,53 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <allure.version>2.32.0</allure.version>
+    <!-- Allure Report (HTML generator) -->
+    <allure.report.version>2.37.0</allure.report.version>
+    <!-- Needed for @Step / @Attachment annotations -->
+    <aspectj.version>1.9.20.1</aspectj.version>
+
   </properties>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-bom</artifactId>
+        <version>${allure.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
+    <!-- Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-testng</artifactId>
+      <version>2.29.1</version>
+      <scope>compile</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-testng</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>aspectjweaver</artifactId>
+      <version>${aspectj.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-selenide</artifactId>
+      <scope>test</scope>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
@@ -34,6 +78,14 @@
       <artifactId>webdrivermanager</artifactId>
       <version>6.3.2</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.16</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- Screen recording during tests -->
     <dependency>
       <groupId>com.github.stephenc.monte</groupId>
@@ -42,4 +94,44 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.3</version>
+        <configuration>
+          <argLine>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
+          <suiteXmlFiles>
+            <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+          </suiteXmlFiles>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- AspectJ approach is the official recommended way for @Step/@Attachment. :contentReference[oaicite:1]{index=1} -->
+
+      <!-- Allure Maven plugin (generate HTML report) -->
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <version>2.17.0</version>
+        <configuration>
+          <reportVersion>${allure.report.version}</reportVersion>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
 </project>

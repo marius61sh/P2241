@@ -1,5 +1,7 @@
 package org.example.pom;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.example.utils.Utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
@@ -11,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.security.Key;
 import java.time.Duration;
 import java.util.function.Function;
@@ -69,64 +72,86 @@ public class FormPom {
         WebElement cell = wait.until(d -> d.findElement(valueCell));
         return cell.getText();
     }
-
+    @Step("Set Gender")
     public void setGender(String genderParam) {
+        takeScreenshot("Before Set Gender");
         WebElement gender = driver.findElement(By.xpath("//*[@id='genterWrapper']//label[text()='" + genderParam + "']"));
         gender.click();
+        takeScreenshot("After Set Gender");
     }
+    @Step("Set State")
     public void setState(String stateParam) {
+        takeScreenshot("Before Set State");
         scrollToElement(state);
         state.click();
         WebElement stateOption = driver.findElement(By.xpath("//*[text()='" + stateParam + "']"));
         stateOption.click();
+        takeScreenshot("After Set State");
     }
-
+    @Step("Set City")
     public void setCity(String cityParam) {
+        takeScreenshot("Before Set City");
         city.click();
         WebElement cityOption = driver.findElement(By.xpath("//*[text()='" + cityParam + "']"));
         cityOption.click();
+        takeScreenshot("After Set City");
     }
-
+    @Step("Set Hobby")
     public void setHobby(String hobbyParam) {
+        takeScreenshot("Before Set Hobby");
         WebElement ddState = driver.findElement(By.xpath("//*[@id='hobbiesWrapper']//label[text()='" + hobbyParam + "']/../input"));
         ddState.sendKeys(" ");
+        takeScreenshot("After Set Hobby");
     }
-
+    @Step("Set Number")
     public void setNumber(String numberParam) {
+        takeScreenshot("Before Set Number");
         userNumber.clear();
         userNumber.sendKeys(numberParam);
+        takeScreenshot("After Set Number");
     }
-
+    @Step("Set Date")
     public void setDate(String dateParam) {
+        takeScreenshot("Before Set Date");
         dateOfBirthInput.sendKeys(Keys.CONTROL, "a");
         dateOfBirthInput.sendKeys(dateParam);
         dateOfBirthInput.sendKeys(Keys.ENTER);
+        takeScreenshot("After Set Date");
     }
-
+    @Step("Set Subject")
     public void setSubject(String subjectParam) {
+        takeScreenshot("Before Set Subject");
         subjectsInput.clear();
         subjectsInput.sendKeys(subjectParam);
         subjectsInput.sendKeys(Keys.ENTER);
+        takeScreenshot("After Set Subject");
     }
 
-
+    @Step("Set First Name")
     public void setFirstName(String firstNameParam) {
+        takeScreenshot("Before Set First Name");
         firstName.clear();
         firstName.sendKeys(firstNameParam);
+        takeScreenshot("After Set First Name");
     }
-
+    @Step("Set Last Name")
     public void setLastName(String lastNameParam) {
+        takeScreenshot("Before Set Last Name");
         lastName.clear();
         lastName.sendKeys(lastNameParam);
+        takeScreenshot("After Set Last Name");
     }
-
+    @Step("Set User Email")
     public void setUserEmail(String userEmailParam) {
+        takeScreenshot("Before Set User Email");
         userEmail.clear();
         userEmail.sendKeys(userEmailParam);
+        takeScreenshot("After Set User Email");
     }
     public void clickPracticeForm() {
         practiceForm.click();
     }
+
 
     public void clickForms() {
         forms.click();
@@ -174,6 +199,15 @@ public class FormPom {
             js.executeScript("var elem = document.evaluate(\"//footer\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;" +
                     "elem.parentNode.removeChild(elem);");
         } catch (Exception ignored) {}
+    }
+
+    private void takeScreenshot(String stepName) {
+        try {
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            Allure.addAttachment(stepName, "image/png", new ByteArrayInputStream(screenshot), ".png");
+        } catch (Exception e) {
+            Allure.addAttachment("Screenshot Error", e.toString());
+        }
     }
 
 }
