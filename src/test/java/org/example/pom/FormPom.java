@@ -82,19 +82,25 @@ public class FormPom {
     @Step("Set State")
     public void setState(String stateParam) {
         takeScreenshot("Before Set State");
+        closeAdvert();
         clickWithRetry(By.id("state"));
 
-        By stateOptionBy = By.xpath("//*[contains(@id,'react-select-3-option') and normalize-space(text())='" + stateParam + "']");
-        clickWithRetry(stateOptionBy);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebElement input = wait.until(d -> d.findElement(By.id("react-select-3-input")));
+        input.sendKeys(stateParam);
+        input.sendKeys(Keys.ENTER);
         takeScreenshot("After Set State");
     }
     @Step("Set City")
     public void setCity(String cityParam) {
         takeScreenshot("Before Set City");
+        closeAdvert();
         clickWithRetry(By.id("city"));
 
-        By cityOptionBy = By.xpath("//*[contains(@id,'react-select-4-option') and normalize-space(text())='" + cityParam + "']");
-        clickWithRetry(cityOptionBy);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebElement input = wait.until(d -> d.findElement(By.id("react-select-4-input")));
+        input.sendKeys(cityParam);
+        input.sendKeys(Keys.ENTER);
         takeScreenshot("After Set City");
     }
     @Step("Set Hobby")
