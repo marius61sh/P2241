@@ -182,9 +182,6 @@ public class FormPom {
         return wait.until(condition);
     }
 
-
-
-
     public void scrollToElement(WebElement element) {
         js.executeScript("arguments[0].scrollIntoView(true);", element);
     }

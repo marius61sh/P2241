@@ -33,15 +33,6 @@
   </dependencyManagement>
 
   <dependencies>
-    <!-- Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
-    <dependency>
-      <groupId>io.qameta.allure</groupId>
-      <artifactId>allure-testng</artifactId>
-      <version>2.29.1</version>
-      <scope>compile</scope>
-    </dependency>
-
-
     <dependency>
       <groupId>io.qameta.allure</groupId>
       <artifactId>allure-testng</artifactId>
